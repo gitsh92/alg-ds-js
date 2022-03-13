@@ -122,18 +122,18 @@ class PriorityQueue {
   }
 }
 
-const pq = new PriorityQueue();
-pq.enqueue('A', 1);
-pq.enqueue('B', 2);
-pq.enqueue('C', 3);
-pq.enqueue('D', 4);
-pq.enqueue('E', 5);
-pq.enqueue('F', 6);
-pq.enqueue('G', 1);
+// const pq = new PriorityQueue();
+// pq.enqueue('A', 1);
+// pq.enqueue('B', 2);
+// pq.enqueue('C', 3);
+// pq.enqueue('D', 4);
+// pq.enqueue('E', 5);
+// pq.enqueue('F', 6);
+// pq.enqueue('G', 1);
 
-while (!pq.isEmpty()) {
-  console.log(pq.dequeue());
-}
+// while (!pq.isEmpty()) {
+//   console.log(pq.dequeue());
+// }
 
 module.exports = {
   PriorityQueue

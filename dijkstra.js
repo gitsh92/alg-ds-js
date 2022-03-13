@@ -68,5 +68,5 @@ const dijkstra = (g, start, end) => {
   };
 };
 
-const output = dijkstra(g, 'A', 'E');
+const output = dijkstra(g, 'A', 'B');
 console.log(output);
