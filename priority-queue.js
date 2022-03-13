@@ -7,35 +7,35 @@ class Node {
 
 class PriorityQueue {
   constructor() {
-    this.values = [];
+    this.nodes = [];
   }
 
   enqueue(value, priority) {
-    this.values.push(new Node(value, priority));
+    this.nodes.push(new Node(value, priority));
     this.bubbleUp();
   }
 
   dequeue() {
-    if (this.values.length === 0) {
+    if (this.nodes.length === 0) {
       return; // or throw
     }
 
-    if (this.values.length === 1) {
-      return this.values.pop();
+    if (this.nodes.length === 1) {
+      return this.nodes.pop();
     }
 
-    const maxPriority = this.values[0];
-    this.values[0] = this.values.pop(); // send last el to top
+    const maxPriority = this.nodes[0];
+    this.nodes[0] = this.nodes.pop(); // send last el to top
     this.sinkDown();
     return maxPriority;
   }
 
   bubbleUp() {
-    let idx = this.values.length - 1;
-    const el = this.values[idx];
+    let idx = this.nodes.length - 1;
+    const el = this.nodes[idx];
     let parentIdx = this.getParentIdx(idx);
 
-    while (parentIdx >= 0 && el.priority < this.values[parentIdx].priority) {
+    while (parentIdx >= 0 && el.priority < this.nodes[parentIdx].priority) {
       this.swap(idx, parentIdx);
       idx = parentIdx;
       parentIdx = this.getParentIdx(idx);
@@ -44,47 +44,35 @@ class PriorityQueue {
 
   sinkDown() {
     let idx = 0;
-    const el = this.values[idx];
 
     while (true) {
-      if (this.hasRightChild(idx)) {
-        // has two children
-        const leftIdx = this.getLeftChildIdx(idx);
-        const rightIdx = this.getRightChildIdx(idx);
-        const leftChildEl = this.getLeftChildEl(idx);
-        const rightChildEl = this.getRightChildEl(idx);
+      let minChildIdx = idx;
 
-        if (
-          el.priority > leftChildEl.priority ||
-          el.priority > rightChildEl.priority
-        ) {
-          const priorityChildIdx =
-            leftChildEl.priority <= rightChildEl.priority ? leftIdx : rightIdx;
-          this.swap(idx, priorityChildIdx);
-          idx = priorityChildIdx;
-        } else {
-          break;
-        }
-      } else if (this.hasLeftChild(idx)) {
-        // has only left child
-        const leftChildEl = this.getLeftChildEl(idx);
-
-        if (el.priority > leftChildEl.priority) {
-          const leftChildIdx = this.getLeftChildIdx(idx);
-          this.swap(idx, leftChildIdx);
-          idx = leftChildIdx;
-        } else {
-          break;
-        }
-      } else {
-        // has no children
-        break;
+      if (
+        this.hasLeftChild(idx) &&
+        this.getLeftChildEl(idx).priority < this.nodes[minChildIdx].priority
+      ) {
+        minChildIdx = this.getLeftChildIdx(idx);
       }
+
+      if (
+        this.hasRightChild(idx) &&
+        this.getRightChildEl(idx).priority < this.nodes[minChildIdx].priority
+      ) {
+        minChildIdx = this.getRightChildIdx(idx);
+      }
+
+      if (minChildIdx === idx) {
+        return;
+      }
+
+      this.swap(idx, minChildIdx);
+      idx = minChildIdx;
     }
   }
 
   get size() {
-    return this.values.length;
+    return this.nodes.length;
   }
 
   isEmpty() {
@@ -95,24 +83,28 @@ class PriorityQueue {
     return Math.floor((idx - 1) / 2);
   }
 
+  hasParent(idx) {
+    return this.getParentIdx(idx) >= 0;
+  }
+
   getParentEl(idx) {
-    return this.values[this.getParentIdx(idx)];
+    return this.nodes[this.getParentIdx(idx)];
   }
 
   hasLeftChild(idx) {
-    return 2 * idx + 1 < this.values.length;
+    return 2 * idx + 1 < this.nodes.length;
   }
 
   hasRightChild(idx) {
-    return 2 * idx + 2 < this.values.length;
+    return 2 * idx + 2 < this.nodes.length;
   }
 
   getLeftChildEl(idx) {
-    return this.values[2 * idx + 1];
+    return this.nodes[2 * idx + 1];
   }
 
   getRightChildEl(idx) {
-    return this.values[2 * idx + 2];
+    return this.nodes[2 * idx + 2];
   }
 
   getLeftChildIdx(idx) {
@@ -124,24 +116,24 @@ class PriorityQueue {
   }
 
   swap(idx1, idx2) {
-    const temp = this.values[idx1];
-    this.values[idx1] = this.values[idx2];
-    this.values[idx2] = temp;
+    const temp = this.nodes[idx1];
+    this.nodes[idx1] = this.nodes[idx2];
+    this.nodes[idx2] = temp;
   }
 }
 
-// const pq = new PriorityQueue();
-// pq.enqueue('A', 1);
-// pq.enqueue('B', 2);
-// pq.enqueue('C', 3);
-// pq.enqueue('D', 4);
-// pq.enqueue('E', 5);
-// pq.enqueue('F', 6);
-// pq.enqueue('G', 1);
+const pq = new PriorityQueue();
+pq.enqueue('A', 1);
+pq.enqueue('B', 2);
+pq.enqueue('C', 3);
+pq.enqueue('D', 4);
+pq.enqueue('E', 5);
+pq.enqueue('F', 6);
+pq.enqueue('G', 1);
 
-// while (!pq.isEmpty()) {
-//   console.log(pq.dequeue());
-// }
+while (!pq.isEmpty()) {
+  console.log(pq.dequeue());
+}
 
 module.exports = {
   PriorityQueue
