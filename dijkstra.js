@@ -13,35 +13,39 @@ g.addEdge('A', 'C', 2);
 g.addEdge('B', 'E', 3);
 g.addEdge('C', 'D', 2);
 g.addEdge('C', 'F', 4);
-g.addEdge('D', 'F', 1);
 g.addEdge('D', 'E', 3);
+g.addEdge('D', 'F', 1);
 g.addEdge('E', 'F', 1);
 
 const dijkstra = (g, start, end) => {
   const previous = {};
   const distances = {};
+  const visited = {};
   const minQueue = new pq.PriorityQueue();
 
   g.nodes.forEach(n => {
     if (n === start) {
       distances[n] = 0;
-      minQueue.enqueue(n, 0);
     } else {
       distances[n] = Infinity;
-      minQueue.enqueue(n, Infinity);
     }
-
     previous[n] = null;
   });
 
+  minQueue.enqueue(start, 0);
+
   while (!minQueue.isEmpty()) {
     const { value: vertex } = minQueue.dequeue();
+
+    visited[vertex] = true;
 
     if (vertex === end) {
       break;
     }
 
     for (let edge of g.edges(vertex)) {
+      if (visited[edge.node]) continue;
+
       const newDistance = distances[vertex] + edge.weight;
       if (newDistance < distances[edge.node]) {
         distances[edge.node] = newDistance;
