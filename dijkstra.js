@@ -39,10 +39,6 @@ const dijkstra = (g, start, end) => {
 
     visited[vertex] = true;
 
-    if (vertex === end) {
-      break;
-    }
-
     for (let edge of g.edges(vertex)) {
       if (visited[edge.node]) continue;
 
@@ -52,6 +48,10 @@ const dijkstra = (g, start, end) => {
         previous[edge.node] = vertex;
         minQueue.enqueue(edge.node, newDistance);
       }
+    }
+
+    if (vertex === end) {
+      break;
     }
   }
 
